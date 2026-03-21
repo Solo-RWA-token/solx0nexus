@@ -14,6 +14,7 @@ import { Profile } from './components/Profile';
 import { OrderSuccess } from './components/OrderSuccess';
 import { Login } from './components/Login';
 import { Orders } from './components/Orders';
+import { VehicleDetails } from './components/VehicleDetails';
 import { Vehicle } from './constants';
 
 export default function App() {
@@ -21,6 +22,8 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState('home');
   const [cart, setCart] = useState<Vehicle[]>([]);
   const [pendingCheckout, setPendingCheckout] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
+  const [previousScreen, setPreviousScreen] = useState('catalog');
 
   // Scroll to top on screen change
   useEffect(() => {
@@ -37,7 +40,14 @@ export default function App() {
 
   const handleAddToCart = (vehicle: Vehicle) => {
     setCart((prev) => [...prev, vehicle]);
+    setSelectedVehicle(null);
     setCurrentScreen('hangar');
+  };
+
+  const handleViewDetails = (vehicle: Vehicle, fromScreen: string) => {
+    setSelectedVehicle(vehicle);
+    setPreviousScreen(fromScreen);
+    setCurrentScreen('vehicle-details');
   };
 
   const handleRemoveFromCart = (id: string) => {
@@ -93,9 +103,22 @@ export default function App() {
       case 'home':
         return <Home onNavigate={setCurrentScreen} />;
       case 'catalog':
-        return <Catalog onAddToCart={handleAddToCart} />;
+        return <Catalog onAddToCart={handleAddToCart} onViewDetails={(v) => handleViewDetails(v, 'catalog')} />;
       case 'hangar':
-        return <Hangar cart={cart} onRemove={handleRemoveFromCart} onCheckout={handleCheckout} />;
+        return <Hangar cart={cart} onRemove={handleRemoveFromCart} onCheckout={handleCheckout} onViewDetails={(v) => handleViewDetails(v, 'hangar')} />;
+      case 'vehicle-details':
+        if (selectedVehicle) {
+          const isInCart = cart.some(item => item.id === selectedVehicle.id);
+          return (
+            <VehicleDetails 
+              vehicle={selectedVehicle} 
+              onBack={() => setCurrentScreen(previousScreen)} 
+              onAddToCart={handleAddToCart}
+              isInCart={isInCart}
+            />
+          );
+        }
+        return <Catalog onAddToCart={handleAddToCart} onViewDetails={(v) => handleViewDetails(v, 'catalog')} />;
       case 'checkout':
         if (!user) {
           return <Login onNavigate={setCurrentScreen} onLoginSuccess={handleLoginSuccess} />;

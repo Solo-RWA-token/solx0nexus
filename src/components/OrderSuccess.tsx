@@ -82,7 +82,7 @@ export const OrderSuccess = ({ onNavigate }: { onNavigate: (s: string) => void }
                 </div>
               </div>
               <button 
-                onClick={() => onNavigate('home')}
+                onClick={() => onNavigate('orders')}
                 className="w-full md:w-auto kinetic-gradient px-8 py-4 rounded-md text-surface font-sans text-sm font-bold uppercase tracking-widest text-center hover:scale-105 transition-transform duration-200 active:scale-95"
               >
                 View Fleet History

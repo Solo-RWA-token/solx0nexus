@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Zap, Battery, Volume2, ShieldCheck, Cpu, Bolt, Activity } from 'lucide-react';
+import { Zap, Battery, Volume2, ShieldCheck, Cpu, Bolt, Activity, Eye } from 'lucide-react';
 import { VEHICLES, Vehicle } from '../constants';
 
-export const Catalog = ({ onAddToCart }: { onAddToCart: (v: Vehicle) => void }) => {
+export const Catalog = ({ onAddToCart, onViewDetails }: { onAddToCart: (v: Vehicle) => void, onViewDetails: (v: Vehicle) => void }) => {
   const [filter, setFilter] = useState('ALL');
 
   const filteredVehicles = filter === 'ALL' 
@@ -97,12 +97,21 @@ export const Catalog = ({ onAddToCart }: { onAddToCart: (v: Vehicle) => void }) 
                 </div>
               </div>
 
-              <button 
-                onClick={() => onAddToCart(vehicle)}
-                className="mt-4 w-full bg-gradient-to-r from-primary to-primary-dim text-surface py-3 font-headline font-black text-sm uppercase tracking-widest rounded-md hover:brightness-110 active:scale-[0.98] transition-all"
-              >
-                CONFIGURE UNIT
-              </button>
+              <div className="flex gap-2 mt-4">
+                <button 
+                  onClick={() => onViewDetails(vehicle)}
+                  className="flex-1 bg-surface-container-high text-primary py-3 font-headline font-bold text-sm uppercase tracking-widest rounded-md hover:bg-surface-container-highest active:scale-[0.98] transition-all flex items-center justify-center gap-2 border border-primary/20"
+                >
+                  <Eye size={16} />
+                  VIEW
+                </button>
+                <button 
+                  onClick={() => onAddToCart(vehicle)}
+                  className="flex-1 bg-gradient-to-r from-primary to-primary-dim text-surface py-3 font-headline font-black text-sm uppercase tracking-widest rounded-md hover:brightness-110 active:scale-[0.98] transition-all"
+                >
+                  ADD TO CART
+                </button>
+              </div>
             </div>
           </motion.div>
         ))}

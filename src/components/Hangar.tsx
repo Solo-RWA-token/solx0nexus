@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
-import { Trash2, Verified } from 'lucide-react';
+import { Trash2, Verified, Eye } from 'lucide-react';
 import { Vehicle } from '../constants';
 
-export const Hangar = ({ cart, onRemove, onCheckout }: { cart: Vehicle[], onRemove: (id: string) => void, onCheckout: () => void }) => {
+export const Hangar = ({ cart, onRemove, onCheckout, onViewDetails }: { cart: Vehicle[], onRemove: (id: string) => void, onCheckout: () => void, onViewDetails: (v: Vehicle) => void }) => {
   const subtotal = cart.reduce((acc, item) => acc + item.price, 0);
   const tax = subtotal * 0.042;
   const total = subtotal + tax;
@@ -71,7 +71,14 @@ export const Hangar = ({ cart, onRemove, onCheckout }: { cart: Vehicle[], onRemo
                       </div>
                     </div>
                   </div>
-                  <div className="mt-8 md:mt-0 flex justify-end">
+                  <div className="mt-8 md:mt-0 flex justify-between items-end">
+                    <button 
+                      onClick={() => onViewDetails(item)}
+                      className="flex items-center gap-2 text-primary hover:text-primary-dim transition-colors"
+                    >
+                      <Eye size={16} />
+                      <span className="text-xs uppercase tracking-widest font-bold">View Details</span>
+                    </button>
                     <span className="font-headline text-xl font-bold text-primary">${item.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
                 </div>
