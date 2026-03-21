@@ -1,14 +1,16 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
-import { Menu, ShoppingCart, Home, Grid, Receipt, User, ArrowRight, ArrowLeft, Trash2, Verified, ShieldCheck, Lock, Zap, Cpu, Battery, Activity, LogIn, LogOut } from 'lucide-react';
+import { Menu, ShoppingCart, Home, Grid, Receipt, User, ArrowRight, ArrowLeft, Trash2, Verified, ShieldCheck, Lock, Zap, Cpu, Battery, Activity, LogIn, LogOut, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { UserProfile } from '../types';
 
 // --- Shared Components ---
 
 export const Navbar = ({ onNavigate, currentScreen, cartCount, user }: { onNavigate: (s: string) => void, currentScreen: string, cartCount: number, user?: UserProfile | null }) => {
   const { logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const handleLogout = async () => {
     await logout();
     onNavigate('home');
@@ -76,6 +78,13 @@ export const Navbar = ({ onNavigate, currentScreen, cartCount, user }: { onNavig
               <span className="hidden md:inline text-[10px] font-bold uppercase tracking-widest">Login</span>
             </button>
           )}
+          <button 
+            onClick={toggleTheme}
+            className="text-outline hover:text-primary active:scale-95 duration-200 cursor-pointer p-2 rounded-lg hover:bg-surface-container transition-colors"
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
           <button 
             className="text-primary active:scale-95 duration-200 cursor-pointer relative"
             onClick={() => onNavigate('hangar')}
